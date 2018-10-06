@@ -1,28 +1,34 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react"
+import axios from "axios"
+import Link from "react-router-dom/Link"
 
 class App extends Component {
+  state = {
+    articles: []
+  }
+  componentDidMount = async () => {
+    const { data } = await axios.get("/articles")
+    this.setState({
+      articles: data
+    })
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <h1>Articles</h1>
+        {this.state.articles.map(el => {
+          return (
+            <React.Fragment key={el.id}>
+              <h2>{el.Title}</h2>
+              <p>{el.lead}</p>
+              <Link to={`${el.id}`}>Read full Article</Link>
+            </React.Fragment>
+          )
+        })}
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
